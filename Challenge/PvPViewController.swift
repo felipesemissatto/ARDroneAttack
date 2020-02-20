@@ -7,14 +7,14 @@
 //
 
 import UIKit
-//import RealityKit
+import RealityKit
 import ARKit
 import SceneKit
 import MultipeerConnectivity
 
 class PvPViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     
-    @IBOutlet weak var sceneView: ARSCNView!
+    @IBOutlet weak var sceneView: ARView!
     @IBOutlet weak var restartButton: UIButton!
     @IBOutlet weak var messageLabel: MessageLabel!
 
@@ -90,58 +90,26 @@ class PvPViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate 
             // Pause the view's session
             sceneView.session.pause()
         }
-        
-//        @objc
-//        func handleTap(recognizer: UITapGestureRecognizer) {
-//            let location = recognizer.location(in: sceneView)
-//
-//            // Attempt to find a 3D location on a horizontal surface underneath the user's touch location.
-//            let results = sceneView.raycast(from: location, allowing: .estimatedPlane, alignment: .horizontal)
-//            if let firstResult = results.first {
-//                // Add an ARAnchor at the touch location with a special name you check later in `session(_:didAdd:)`.
-//                let anchor = ARAnchor(name: "Anchor for object placement", transform: firstResult.worldTransform)
-//                sceneView.session.add(anchor: anchor)
-//
-//            } else {
-//                messageLabel.displayMessage("Can't place object - no surface found.\nLook for flat surfaces.", duration: 2.0)
-//                print("Warning: Object placement failed.")
-//            }
-//        }
-//
-//        func session(_ session: ARSession, didAdd anchors: [ARAnchor]) {
-//            for anchor in anchors {
-//                if let participantAnchor = anchor as? ARParticipantAnchor {
-//                    messageLabel.displayMessage("Established joint experience with a peer.")
-//                    // ...
-//                    let anchorEntity = AnchorEntity(anchor: participantAnchor)
-//
-//                    let coordinateSystem = MeshResource.generateCoordinateSystemAxes()
-//                    anchorEntity.addChild(coordinateSystem)
-//
-//                    let color = participantAnchor.sessionIdentifier?.toRandomColor() ?? .white
-//                    let coloredSphere = ModelEntity(mesh: MeshResource.generateSphere(radius: 0.03),
-//                                                    materials: [SimpleMaterial(color: color, isMetallic: true)])
-//                    anchorEntity.addChild(coloredSphere)
-//
-//                    sceneView.scene.addAnchor(anchorEntity)
-//                } else if anchor.name == "Anchor for object placement" {
-//                    // Create a cube at the location of the anchor.
-//                    let boxLength: Float = 0.05
-//                    // Color the cube based on the user that placed it.
-//                    let color = anchor.sessionIdentifier?.toRandomColor() ?? .white
-//                    let coloredCube = ModelEntity(mesh: MeshResource.generateBox(size: boxLength),
-//                                                  materials: [SimpleMaterial(color: color, isMetallic: true)])
-//                    // Offset the cube by half its length to align its bottom with the real-world surface.
-//                    coloredCube.position = [0, boxLength / 2, 0]
-//
-//                    // Attach the cube to the ARAnchor via an AnchorEntity.
-//                    //   World origin -> ARAnchor -> AnchorEntity -> ModelEntity
-//                    let anchorEntity = AnchorEntity(anchor: anchor)
-//                    anchorEntity.addChild(coloredCube)
-//                    sceneView.scene.addAnchor(anchorEntity)
-//                }
-//            }
-//        }
+
+        func session(_ session: ARSession, didAdd anchors: [ARAnchor]) {
+            for anchor in anchors {
+                if let participantAnchor = anchor as? ARParticipantAnchor {
+                    messageLabel.displayMessage("Established joint experience with a peer.")
+                    // ...
+                    let anchorEntity = AnchorEntity(anchor: participantAnchor)
+
+                    let coordinateSystem = MeshResource.generateCoordinateSystemAxes()
+                    anchorEntity.addChild(coordinateSystem)
+
+                    let color = participantAnchor.sessionIdentifier?.toRandomColor() ?? .white
+                    let coloredSphere = ModelEntity(mesh: MeshResource.generateSphere(radius: 0.03),
+                                                    materials: [SimpleMaterial(color: color, isMetallic: true)])
+                    anchorEntity.addChild(coloredSphere)
+
+                    sceneView.scene.addAnchor(anchorEntity)
+                }
+            }
+        }
         
         /// - Tag: DidOutputCollaborationData
         func session(_ session: ARSession, didOutputCollaborationData data: ARSession.CollaborationData) {
