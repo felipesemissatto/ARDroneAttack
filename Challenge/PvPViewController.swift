@@ -9,10 +9,10 @@
 import UIKit
 import RealityKit
 import ARKit
-import SceneKit
+//import SceneKit
 import MultipeerConnectivity
 
-class PvPViewController: UIViewController, ARSessionDelegate {
+class PvPViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     
 
     @IBOutlet var sceneView: ARView!

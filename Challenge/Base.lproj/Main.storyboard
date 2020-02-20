@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="15505" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="xjM-lm-N3w">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="15702" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="xjM-lm-N3w">
     <device id="retina6_1" orientation="landscape" appearance="light"/>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15509"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15704"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -57,7 +57,7 @@
                                 <rect key="frame" x="0.0" y="0.0" width="896" height="414"/>
                             </arscnView>
                             <imageView hidden="YES" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="mira" translatesAutoresizingMaskIntoConstraints="NO" id="87R-6f-bqR">
-                                <rect key="frame" x="257.5" y="100" width="381" height="215"/>
+                                <rect key="frame" x="257.5" y="100" width="381.00000000000023" height="215"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="215" id="BkH-pd-JY3"/>
                                     <constraint firstAttribute="width" constant="380.99999999999977" id="VEa-u8-yUv"/>
@@ -90,7 +90,7 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" usesAttributedText="YES" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="8hm-ht-wHb" userLabel="Log Label">
-                                <rect key="frame" x="261.5" y="144" width="373" height="105"/>
+                                <rect key="frame" x="273" y="144" width="350" height="105"/>
                                 <attributedString key="attributedText">
                                     <fragment content="Low energy">
                                         <attributes>
@@ -142,14 +142,14 @@
                                 </constraints>
                             </imageView>
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="timer" translatesAutoresizingMaskIntoConstraints="NO" id="yDa-H8-RhC">
-                                <rect key="frame" x="71.5" y="244" width="120" height="120"/>
+                                <rect key="frame" x="59.5" y="244" width="120" height="120"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="120" id="oqb-rb-4Oj"/>
                                     <constraint firstAttribute="height" constant="120" id="qxG-fw-Fg5"/>
                                 </constraints>
                             </imageView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" usesAttributedText="YES" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="rVm-me-6IP">
-                                <rect key="frame" x="91" y="276" width="80.5" height="56"/>
+                                <rect key="frame" x="91" y="279" width="57" height="50"/>
                                 <attributedString key="attributedText">
                                     <fragment content="100">
                                         <attributes>
@@ -162,7 +162,7 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <imageView hidden="YES" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="defeat" translatesAutoresizingMaskIntoConstraints="NO" id="lRp-9o-zqQ" userLabel="Defeat Hud">
-                                <rect key="frame" x="0.0" y="0.0" width="896" height="100"/>
+                                <rect key="frame" x="0.0" y="0.0" width="896.00000000000045" height="100"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="100" id="Hxs-EO-4mi"/>
                                     <constraint firstAttribute="width" constant="896" id="tqm-WV-QqL"/>
@@ -258,7 +258,7 @@
         <scene sceneID="QVz-4c-THU">
             <objects>
                 <viewController id="54p-8y-8Vq" customClass="PvPViewController" customModule="Challenge" customModuleProvider="target" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="BLU-oV-E5J">
+                    <view key="view" contentMode="scaleToFill" id="BLU-oV-E5J" customClass="ARView" customModule="RealityKit">
                         <rect key="frame" x="0.0" y="0.0" width="896" height="414"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
