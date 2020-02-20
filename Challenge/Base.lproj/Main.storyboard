@@ -262,9 +262,6 @@
                         <rect key="frame" x="0.0" y="0.0" width="896" height="414"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <arscnView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="amQ-7f-y38">
-                                <rect key="frame" x="0.0" y="0.0" width="896" height="414"/>
-                            </arscnView>
                             <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="JZY-HX-VTK" customClass="MessageLabel" customModule="Challenge" customModuleProvider="target">
                                 <rect key="frame" x="49" y="5" width="798" height="60"/>
                                 <color key="backgroundColor" red="0.6922967941" green="0.6922967941" blue="0.6922967941" alpha="0.88345296959999997" colorSpace="custom" customColorSpace="displayP3"/>
@@ -287,13 +284,9 @@
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                         <constraints>
                             <constraint firstItem="JZY-HX-VTK" firstAttribute="top" secondItem="6Op-ph-0nQ" secondAttribute="top" constant="5" id="C6S-rE-TAO"/>
-                            <constraint firstItem="amQ-7f-y38" firstAttribute="top" secondItem="6Op-ph-0nQ" secondAttribute="top" id="LTK-7X-agb"/>
-                            <constraint firstAttribute="bottom" secondItem="amQ-7f-y38" secondAttribute="bottom" id="LvT-4d-Zq4"/>
                             <constraint firstItem="C0s-fJ-dAm" firstAttribute="top" secondItem="JZY-HX-VTK" secondAttribute="bottom" constant="8" id="PNh-XQ-fDx"/>
                             <constraint firstItem="6Op-ph-0nQ" firstAttribute="trailing" secondItem="JZY-HX-VTK" secondAttribute="trailing" constant="5" id="eAO-93-dIm"/>
                             <constraint firstItem="JZY-HX-VTK" firstAttribute="leading" secondItem="6Op-ph-0nQ" secondAttribute="leading" constant="5" id="i37-hy-66F"/>
-                            <constraint firstAttribute="trailing" secondItem="amQ-7f-y38" secondAttribute="trailing" id="mnV-4N-Mva"/>
-                            <constraint firstItem="amQ-7f-y38" firstAttribute="leading" secondItem="BLU-oV-E5J" secondAttribute="leading" id="v47-yA-oFF"/>
                             <constraint firstItem="6Op-ph-0nQ" firstAttribute="trailing" secondItem="C0s-fJ-dAm" secondAttribute="trailing" constant="5" id="xCw-I6-sCp"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="6Op-ph-0nQ"/>
@@ -302,7 +295,7 @@
                     <connections>
                         <outlet property="messageLabel" destination="JZY-HX-VTK" id="8zu-hD-vy5"/>
                         <outlet property="restartButton" destination="C0s-fJ-dAm" id="qZG-fD-Y4c"/>
-                        <outlet property="sceneView" destination="amQ-7f-y38" id="ZJa-JS-Td5"/>
+                        <outlet property="sceneView" destination="BLU-oV-E5J" id="byS-dI-QFN"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="uhe-YI-d8M" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>

@@ -12,9 +12,10 @@ import ARKit
 import SceneKit
 import MultipeerConnectivity
 
-class PvPViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
+class PvPViewController: UIViewController, ARSessionDelegate {
     
-    @IBOutlet weak var sceneView: ARView!
+
+    @IBOutlet var sceneView: ARView!
     @IBOutlet weak var restartButton: UIButton!
     @IBOutlet weak var messageLabel: MessageLabel!
 
@@ -38,7 +39,7 @@ class PvPViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate 
 
             // Turn off ARView's automatically-configured session
             // to create and set up your own configuration.
-//            sceneView.automaticallyConfigureSession = false
+            sceneView.automaticallyConfigureSession = false
             
             configuration = ARWorldTrackingConfiguration()
 
@@ -103,7 +104,7 @@ class PvPViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate 
 
                     let color = participantAnchor.sessionIdentifier?.toRandomColor() ?? .white
                     let coloredSphere = ModelEntity(mesh: MeshResource.generateSphere(radius: 0.03),
-                                                    materials: [SimpleMaterial(color: color, isMetallic: true)])
+                                                    materials: [SimpleMaterial(color: color, isMetallic: false)])
                     anchorEntity.addChild(coloredSphere)
 
                     sceneView.scene.addAnchor(anchorEntity)
