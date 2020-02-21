@@ -18,7 +18,8 @@ class PvPViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate 
     @IBOutlet var sceneView: ARView!
     @IBOutlet weak var restartButton: UIButton!
     @IBOutlet weak var messageLabel: MessageLabel!
-
+    @IBOutlet weak var shootButton: UIButton!
+    
     var multipeerSession: MultipeerSession?
     
     let coachingOverlay = ARCoachingOverlayView()
@@ -70,8 +71,8 @@ class PvPViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate 
             // Prevent the screen from being dimmed to avoid interrupting the AR experience.
             UIApplication.shared.isIdleTimerDisabled = true
 
-//            sceneView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(handleTap(recognizer:))))
-            
+        shootButton.isHidden = true
+        
             messageLabel.displayMessage("Tap the screen to place cubes.\nInvite others to launch this app to join you.", duration: 60.0)
         }
     
@@ -108,6 +109,8 @@ class PvPViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate 
                     anchorEntity.addChild(coloredSphere)
 
                     sceneView.scene.addAnchor(anchorEntity)
+                    
+                    shootButton.isHidden = false
                 }
             }
         }
@@ -207,6 +210,10 @@ class PvPViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate 
             sceneView.session.run(configuration, options: [.resetTracking, .removeExistingAnchors])
         }
         
+        @IBAction func fireButton(_ sender: Any) {
+            
+        }
+    
         override var prefersStatusBarHidden: Bool {
             // Request that iOS hide the status bar to improve immersiveness of the AR experience.
             return true
