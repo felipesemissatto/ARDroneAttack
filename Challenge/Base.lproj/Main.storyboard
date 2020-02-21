@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="15702" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="xjM-lm-N3w">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="15505" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="xjM-lm-N3w">
     <device id="retina6_1" orientation="landscape" appearance="light"/>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15704"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15509"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -258,10 +258,13 @@
         <scene sceneID="QVz-4c-THU">
             <objects>
                 <viewController id="54p-8y-8Vq" customClass="PvPViewController" customModule="Challenge" customModuleProvider="target" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="BLU-oV-E5J" customClass="ARView" customModule="RealityKit">
+                    <view key="view" contentMode="scaleToFill" id="BLU-oV-E5J">
                         <rect key="frame" x="0.0" y="0.0" width="896" height="414"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
+                            <arscnView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="csZ-0K-YEr">
+                                <rect key="frame" x="0.0" y="0.0" width="896" height="414"/>
+                            </arscnView>
                             <imageView hidden="YES" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="cima" translatesAutoresizingMaskIntoConstraints="NO" id="0zi-bs-ej7">
                                 <rect key="frame" x="28" y="24" width="819" height="35"/>
                                 <constraints>
@@ -318,6 +321,7 @@
                             <constraint firstItem="0zi-bs-ej7" firstAttribute="trailing" secondItem="JZY-HX-VTK" secondAttribute="trailing" id="APt-3x-kzk"/>
                             <constraint firstItem="6Op-ph-0nQ" firstAttribute="trailing" secondItem="xCl-jx-WjN" secondAttribute="trailing" constant="16" id="GdE-TM-X6A"/>
                             <constraint firstItem="C0s-fJ-dAm" firstAttribute="top" secondItem="JZY-HX-VTK" secondAttribute="bottom" constant="8" id="JZD-lw-ubt"/>
+                            <constraint firstItem="csZ-0K-YEr" firstAttribute="top" secondItem="6Op-ph-0nQ" secondAttribute="top" id="KK4-PM-phm"/>
                             <constraint firstItem="6Op-ph-0nQ" firstAttribute="bottom" secondItem="xCl-jx-WjN" secondAttribute="bottom" constant="16" id="N7w-Cz-FIA"/>
                             <constraint firstItem="EQs-8R-Qg7" firstAttribute="leading" secondItem="BLU-oV-E5J" secondAttribute="leading" constant="39" id="YLz-ku-7Fq"/>
                             <constraint firstItem="JZY-HX-VTK" firstAttribute="top" secondItem="6Op-ph-0nQ" secondAttribute="top" constant="5" id="YSI-QE-8wJ"/>
@@ -325,7 +329,10 @@
                             <constraint firstItem="JZY-HX-VTK" firstAttribute="centerX" secondItem="Utd-KG-hfX" secondAttribute="centerX" id="eNM-Gu-W9E"/>
                             <constraint firstItem="Utd-KG-hfX" firstAttribute="centerX" secondItem="BLU-oV-E5J" secondAttribute="centerX" id="g8T-hL-2wG"/>
                             <constraint firstItem="C0s-fJ-dAm" firstAttribute="top" secondItem="0zi-bs-ej7" secondAttribute="bottom" constant="14" id="kKM-Xw-DEx"/>
+                            <constraint firstAttribute="bottom" secondItem="csZ-0K-YEr" secondAttribute="bottom" id="m0Y-mh-eCa"/>
+                            <constraint firstAttribute="trailing" secondItem="csZ-0K-YEr" secondAttribute="trailing" id="tTa-95-7DW"/>
                             <constraint firstItem="EQs-8R-Qg7" firstAttribute="bottom" secondItem="6Op-ph-0nQ" secondAttribute="bottom" id="ttG-2b-s7J"/>
+                            <constraint firstItem="csZ-0K-YEr" firstAttribute="leading" secondItem="BLU-oV-E5J" secondAttribute="leading" id="uEt-U5-zpA"/>
                             <constraint firstItem="6Op-ph-0nQ" firstAttribute="trailing" secondItem="C0s-fJ-dAm" secondAttribute="trailing" constant="5" id="xCw-I6-sCp"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="6Op-ph-0nQ"/>
@@ -337,7 +344,7 @@
                         <outlet property="hudTopImage" destination="0zi-bs-ej7" id="1vG-hR-LMJ"/>
                         <outlet property="messageLabel" destination="JZY-HX-VTK" id="8zu-hD-vy5"/>
                         <outlet property="restartButton" destination="C0s-fJ-dAm" id="qZG-fD-Y4c"/>
-                        <outlet property="sceneView" destination="BLU-oV-E5J" id="byS-dI-QFN"/>
+                        <outlet property="sceneView" destination="csZ-0K-YEr" id="EJb-Wx-V6S"/>
                         <outlet property="shootButton" destination="xCl-jx-WjN" id="nxH-HC-GqF"/>
                     </connections>
                 </viewController>

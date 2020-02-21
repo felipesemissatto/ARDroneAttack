@@ -7,16 +7,17 @@
 //
 
 import UIKit
-import RealityKit
+//import RealityKit
 import ARKit
-//import SceneKit
+import SceneKit
 import MultipeerConnectivity
 
 class PvPViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     
     var shootNode: SCNNode!
 
-    @IBOutlet var sceneView: ARView!
+
+    @IBOutlet weak var sceneView: ARSCNView!
     @IBOutlet weak var restartButton: UIButton!
     @IBOutlet weak var messageLabel: MessageLabel!
     @IBOutlet weak var shootButton: UIButton!
@@ -44,7 +45,7 @@ class PvPViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate 
 
             // Turn off ARView's automatically-configured session
             // to create and set up your own configuration.
-            sceneView.automaticallyConfigureSession = false
+//            sceneView.automaticallyConfigureSession = false
             
             configuration = ARWorldTrackingConfiguration()
 
@@ -108,18 +109,18 @@ class PvPViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate 
             for anchor in anchors {
                 if let participantAnchor = anchor as? ARParticipantAnchor {
                     messageLabel.displayMessage("Established joint experience with a peer.")
-                    // ...
-                    let anchorEntity = AnchorEntity(anchor: participantAnchor)
-
-                    let coordinateSystem = MeshResource.generateCoordinateSystemAxes()
-                    anchorEntity.addChild(coordinateSystem)
-
-                    let color = participantAnchor.sessionIdentifier?.toRandomColor() ?? .white
-                    let coloredSphere = ModelEntity(mesh: MeshResource.generateSphere(radius: 0.03),
-                                                    materials: [SimpleMaterial(color: color, isMetallic: false)])
-                    anchorEntity.addChild(coloredSphere)
-
-                    sceneView.scene.addAnchor(anchorEntity)
+//                    // ...
+//                    let anchorEntity = AnchorEntity(anchor: participantAnchor)
+//
+//                    let coordinateSystem = MeshResource.generateCoordinateSystemAxes()
+//                    anchorEntity.addChild(coordinateSystem)
+//
+//                    let color = participantAnchor.sessionIdentifier?.toRandomColor() ?? .white
+//                    let coloredSphere = ModelEntity(mesh: MeshResource.generateSphere(radius: 0.03),
+//                                                    materials: [SimpleMaterial(color: color, isMetallic: false)])
+//                    anchorEntity.addChild(coloredSphere)
+//
+//                    sceneView.scene.addAnchor(anchorEntity)
                     
                     shootButton.isHidden = false
                     self.hudTopImage.isHidden = false
@@ -225,12 +226,12 @@ class PvPViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate 
         }
         
         @IBAction func fireButton(_ sender: Any) {
-            
+            fireMissile()
         }
     
         func fireMissile(){
             
-            let anchor = AnchorEntity()
+//            let anchor = AnchorEntity()
             
             var node = SCNNode()
             //create node
@@ -248,7 +249,7 @@ class PvPViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate 
             node.physicsBody?.applyForce(nodeDirection , asImpulse: true)
             
             //add node to scene
-            sceneView.scene.anchors.append(anchor)
+            sceneView.scene.rootNode.addChildNode(node)
 //            playSound(sound: "laser", format: "wav")
         }
     
