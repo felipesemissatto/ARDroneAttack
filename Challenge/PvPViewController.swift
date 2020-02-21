@@ -20,6 +20,9 @@ class PvPViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate 
     @IBOutlet weak var messageLabel: MessageLabel!
     @IBOutlet weak var shootButton: UIButton!
     
+    @IBOutlet weak var hudTop: UIImageView!
+    @IBOutlet weak var crosshair: UIImageView!
+    @IBOutlet weak var hudBottom: UIImageView!
     var multipeerSession: MultipeerSession?
     
     let coachingOverlay = ARCoachingOverlayView()
@@ -70,8 +73,6 @@ class PvPViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate 
             
             // Prevent the screen from being dimmed to avoid interrupting the AR experience.
             UIApplication.shared.isIdleTimerDisabled = true
-
-        shootButton.isHidden = true
         
             messageLabel.displayMessage("Tap the screen to place cubes.\nInvite others to launch this app to join you.", duration: 60.0)
         }
