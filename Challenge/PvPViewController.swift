@@ -20,9 +20,9 @@ class PvPViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate 
     @IBOutlet weak var messageLabel: MessageLabel!
     @IBOutlet weak var shootButton: UIButton!
     
-    @IBOutlet weak var hudTop: UIImageView!
-    @IBOutlet weak var crosshair: UIImageView!
-    @IBOutlet weak var hudBottom: UIImageView!
+    @IBOutlet weak var hudTopImage: UIImageView!
+    @IBOutlet weak var crosshairImage: UIImageView!
+    @IBOutlet weak var hudBottomImagem: UIImageView!
     var multipeerSession: MultipeerSession?
     
     let coachingOverlay = ARCoachingOverlayView()
@@ -112,6 +112,9 @@ class PvPViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate 
                     sceneView.scene.addAnchor(anchorEntity)
                     
                     shootButton.isHidden = false
+                    self.hudTopImage.isHidden = false
+                    self.crosshairImage.isHidden = false
+                    self.hudBottomImagem.isHidden = false
                 }
             }
         }
