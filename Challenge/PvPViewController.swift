@@ -14,6 +14,7 @@ import MultipeerConnectivity
 
 class PvPViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     
+    var shootNode: SCNNode!
 
     @IBOutlet var sceneView: ARView!
     @IBOutlet weak var restartButton: UIButton!
@@ -77,6 +78,14 @@ class PvPViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate 
             messageLabel.displayMessage("Tap the screen to place cubes.\nInvite others to launch this app to join you.", duration: 60.0)
         }
     
+        override func viewDidLoad() {
+        
+        if let shootScene = SCNScene(named: "Assets.scnassets/drone-shoot.dae") {
+            shootNode = shootScene.rootNode.childNode(withName: "Cube_001", recursively: true)!
+            }
+        
+        }
+    
         override func viewWillAppear(_ animated: Bool) {
             super.viewWillAppear(animated)
             
@@ -93,6 +102,7 @@ class PvPViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate 
             // Pause the view's session
             sceneView.session.pause()
         }
+    
 
         func session(_ session: ARSession, didAdd anchors: [ARAnchor]) {
             for anchor in anchors {
@@ -217,6 +227,65 @@ class PvPViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate 
         @IBAction func fireButton(_ sender: Any) {
             
         }
+    
+        func fireMissile(){
+            
+            let anchor = AnchorEntity()
+            
+            var node = SCNNode()
+            //create node
+            node = createMissile()
+            
+            //get the users position and direction
+            let (direction, position) = self.getUserVector()
+            node.position = position
+            var nodeDirection = SCNVector3()
+           
+            nodeDirection  = SCNVector3(direction.x*4,direction.y*4,direction.z*4)
+            node.physicsBody?.applyForce(nodeDirection, at: SCNVector3(0.1,0,0), asImpulse: true)
+            
+            //move node
+            node.physicsBody?.applyForce(nodeDirection , asImpulse: true)
+            
+            //add node to scene
+            sceneView.scene.anchors.append(anchor)
+//            playSound(sound: "laser", format: "wav")
+        }
+    
+        //creates nodes
+        func createMissile()->SCNNode{
+            let node = shootNode.clone()
+            node.scale = SCNVector3(0.01,0.02,0.02)
+            node.name = "tiro"
+            
+            //the physics body governs how the object interacts with other objects and its environment
+            node.physicsBody = SCNPhysicsBody(type: .dynamic, shape: nil)
+            node.physicsBody?.isAffectedByGravity = false
+            
+            //these bitmasks used to define "collisions" with other objects
+            node.physicsBody?.categoryBitMask = CollisionCategory.missileCategory.rawValue
+            node.physicsBody?.contactTestBitMask = CollisionCategory.targetCategory.rawValue
+            node.physicsBody?.collisionBitMask = CollisionCategory.targetCategory.rawValue
+            
+            return node
+        }
+    
+        func getUserVector() -> (SCNVector3, SCNVector3) { // (direction, position)
+               if let frame = self.sceneView.session.currentFrame {
+                   var translation = matrix_identity_float4x4
+                   translation.columns.0.x = cos(.pi)
+                   translation.columns.0.y = -sin(.pi)
+                   translation.columns.1.x = sin(.pi)
+                   translation.columns.1.y = cos(.pi)
+                   
+                   let mat = SCNMatrix4(frame.camera.transform) // 4x4 transform matrix describing camera in world space
+                   let dir = SCNVector3(-1 * mat.m31, -1 * mat.m32, -1 * mat.m33) // orientation of camera in world space
+                   let pos = SCNVector3(mat.m41, mat.m42, mat.m43) // location of camera in world space
+                   
+                   return (dir, pos)
+               }
+               return (SCNVector3(0, 0, -1), SCNVector3(0, 0, -0.2))
+           }
     
         override var prefersStatusBarHidden: Bool {
             // Request that iOS hide the status bar to improve immersiveness of the AR experience.
