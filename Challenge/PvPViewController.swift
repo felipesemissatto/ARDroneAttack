@@ -27,6 +27,7 @@ class PvPViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate 
     // MARK: - Global Variables
     
     var shootNode: SCNNode!
+    var audioNode = SCNNode()
     var multipeerSession: MultipeerSession!
     
     // MARK: - View Life Cycle
@@ -40,6 +41,9 @@ class PvPViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate 
         
         // Start multipeer session
         multipeerSession = MultipeerSession(receivedDataHandler: receivedData)
+        
+        messageLabel.isHidden = false
+        shootButton.isHidden = false
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -81,8 +85,8 @@ class PvPViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate 
     // MARK: - ARSCNViewDelegate
     
     func renderer(_ renderer: SCNSceneRenderer, didAdd node: SCNNode, for anchor: ARAnchor) {
-        if let name = anchor.name, name.hasPrefix("panda") {
-//            node.addChildNode(loadRedPandaModel())
+        if let name = anchor.name, name.hasPrefix("tiro") {
+            node.addChildNode(shootNode)
         }
     }
     
@@ -102,24 +106,24 @@ class PvPViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate 
 //        case .mapped:
 //            sendMapButton.isEnabled = !multipeerSession.connectedPeers.isEmpty
 //
-//        mappingStatusLabel.text = frame.worldMappingStatus.description
-//        updateSessionInfoLabel(for: frame, trackingState: frame.camera.trackingState)
+//        messageLabel.text = frame.worldMappingStatus.description
+        updateSessionInfoLabel(for: frame, trackingState: frame.camera.trackingState)
     }
     
     // MARK: - ARSessionObserver
     
     func sessionWasInterrupted(_ session: ARSession) {
         // Inform the user that the session has been interrupted, for example, by presenting an overlay.
-//        sessionInfoLabel.text = "Session was interrupted"
+        messageLabel.text = "Session was interrupted"
     }
     
     func sessionInterruptionEnded(_ session: ARSession) {
         // Reset tracking and/or remove existing anchors if consistent tracking is required.
-//        sessionInfoLabel.text = "Session interruption ended"
+        messageLabel.text = "Session interruption ended"
     }
     
     func session(_ session: ARSession, didFailWithError error: Error) {
-//        sessionInfoLabel.text = "Session failed: \(error.localizedDescription)"
+        messageLabel.text = "Session failed: \(error.localizedDescription)"
         guard error is ARError else { return }
         
         let errorWithInfo = error as NSError
@@ -137,7 +141,7 @@ class PvPViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate 
             let alertController = UIAlertController(title: "The AR session failed.", message: errorMessage, preferredStyle: .alert)
             let restartAction = UIAlertAction(title: "Restart Session", style: .default) { _ in
                 alertController.dismiss(animated: true, completion: nil)
-//                self.resetTracking(nil)
+                self.resetTracking()
             }
             alertController.addAction(restartAction)
             self.present(alertController, animated: true, completion: nil)
@@ -215,8 +219,8 @@ class PvPViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate 
             
         }
         
-//        sessionInfoLabel.text = message
-//        sessionInfoView.isHidden = message.isEmpty
+        messageLabel.text = message
+        messageLabel.isHidden = message.isEmpty
     }
     // MARK: - IBActions
     @IBAction func fireButton(_ sender: Any) {
@@ -243,7 +247,18 @@ class PvPViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate 
         
         //add node to scene
         sceneView.scene.rootNode.addChildNode(node)
-//            playSound(sound: "laser", format: "wav")
+        
+        //get the missile ARAnchor to share
+        let anchor1 = ARAnchor(name: "tiro", transform: simd_float4x4(node.worldTransform))
+//        guard let anchor = sceneView.anchor(for: node) else { fatalError("can't find anchor") }
+        sceneView.session.add(anchor: anchor1)
+        
+        // Send the anchor info to peers, so they can place the same content.
+        guard let data = try? NSKeyedArchiver.archivedData(withRootObject: anchor1, requiringSecureCoding: true)
+            else { fatalError("can't encode anchor") }
+        self.multipeerSession.sendToAllPeers(data)
+        
+        playSound(sound: "laser", format: "wav")
     }
     
     //creates nodes
@@ -279,6 +294,35 @@ class PvPViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate 
             return (dir, pos)
         }
         return (SCNVector3(0, 0, -1), SCNVector3(0, 0, -0.2))
+    }
+    
+    func resetTracking() {
+        let configuration = ARWorldTrackingConfiguration()
+        configuration.planeDetection = .horizontal
+        sceneView.session.run(configuration, options: [.resetTracking, .removeExistingAnchors])
+    }
+    
+    func playSound(sound : String, format: String) {
+        
+        guard let url = Bundle.main.url(forResource: sound, withExtension: format) else {
+            return
+        }
+        guard let audiosource = SCNAudioSource(url: url ) else { return }
+        let effect = SCNAction.playAudio(audiosource, waitForCompletion: false)
+        audioNode.runAction(effect)
+    }
+    
+    func addAudioNode(){
+        
+        let audioSource = SCNAudioSource(fileNamed: "overtake.mp3")!
+        audioSource.volume = 0.0
+        let audioPlayer = SCNAudioPlayer(source: audioSource)
+        
+        audioNode.addAudioPlayer(audioPlayer)
+        
+        let play = SCNAction.playAudio(audioSource, waitForCompletion: false)
+        audioNode.runAction(play)
+        sceneView.scene.rootNode.addChildNode(audioNode)
     }
     
     // MARK: - Status Bar Methods
