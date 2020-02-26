@@ -52,7 +52,7 @@ class PvPViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate 
         myDroneNode.load()
         
         let ball = SCNSphere(radius: 0.02)
-        myDroneNode.position = SCNVector3Make(0, 0.15, 0)
+        myDroneNode.position = SCNVector3Make(0, 0, 0.5)
         
         let sphereBodyShape = SCNPhysicsShape(geometry: ball,
                                               options: [SCNPhysicsShape.Option.type: SCNPhysicsShape.ShapeType.boundingBox])
