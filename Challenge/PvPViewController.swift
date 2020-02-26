@@ -28,6 +28,7 @@ class PvPViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate 
     
     var shootNode: SCNNode!
     var audioNode = SCNNode()
+    var myDroneNode: SCNNode!
     var multipeerSession: MultipeerSession!
     
     // MARK: - View Life Cycle
@@ -44,6 +45,33 @@ class PvPViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate 
         
         messageLabel.isHidden = false
         shootButton.isHidden = false
+         
+        //node that represents my drone
+        let sceneURL = Bundle.main.url(forResource: "drone", withExtension: "scn", subdirectory: "Assets.scnassets/drone")!
+        let myDroneNode = SCNReferenceNode(url: sceneURL)!
+        myDroneNode.load()
+        
+        let ball = SCNSphere(radius: 0.02)
+        myDroneNode.position = SCNVector3Make(0, 0.15, 0)
+        
+        let sphereBodyShape = SCNPhysicsShape(geometry: ball,
+                                              options: [SCNPhysicsShape.Option.type: SCNPhysicsShape.ShapeType.boundingBox])
+        let sphereBody = SCNPhysicsBody(type: .kinematic, shape: sphereBodyShape)
+        
+        myDroneNode.physicsBody = sphereBody
+        myDroneNode.physicsBody?.categoryBitMask = CollisionCategory.cameraCategory.rawValue
+        myDroneNode.physicsBody?.contactTestBitMask = CollisionCategory.powerUpsCategory.rawValue
+        myDroneNode.physicsBody?.collisionBitMask = CollisionCategory.powerUpsCategory.rawValue
+        sceneView.pointOfView?.addChildNode(myDroneNode)
+        
+        let anchor1 = ARAnchor(name: "myDrone", transform: simd_float4x4(myDroneNode.worldTransform))
+        //guard let anchor = sceneView.anchor(for: node) else { fatalError("can't find anchor") }
+        sceneView.session.add(anchor: anchor1)
+                
+        // Send the anchor info to peers, so they can place the same content.
+        guard let data = try? NSKeyedArchiver.archivedData(withRootObject: anchor1, requiringSecureCoding: true)
+                else { fatalError("can't encode anchor") }
+        self.multipeerSession.sendToAllPeers(data)
     }
     
     override func viewDidAppear(_ animated: Bool) {
