@@ -11,7 +11,7 @@ import SceneKit
 import ARKit
 import MultipeerConnectivity
 
-class PvPViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
+class PvPViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate, SCNPhysicsContactDelegate {
     
     // MARK: - IBOutlets
 
@@ -19,16 +19,22 @@ class PvPViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate 
     @IBOutlet weak var restartButton: UIButton!
     @IBOutlet weak var messageLabel: MessageLabel!
     @IBOutlet weak var shootButton: UIButton!
+    @IBOutlet weak var ammoLabel: UILabel!
     
     @IBOutlet weak var hudTopImage: UIImageView!
     @IBOutlet weak var crosshairImage: UIImageView!
     @IBOutlet weak var hudBottomImagem: UIImageView!
+    @IBOutlet weak var imageHit: UIImageView!
+    @IBOutlet weak var timer: UIImageView!
     
     // MARK: - Global Variables
     
     var shootNode: SCNNode!
     var audioNode = SCNNode()
     var myDroneNode: SCNNode!
+    
+    var ammo = 100
+    
     var multipeerSession: MultipeerSession!
     
     // MARK: - View Life Cycle
@@ -60,9 +66,13 @@ class PvPViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate 
         
         myDroneNode.physicsBody = sphereBody
         myDroneNode.physicsBody?.categoryBitMask = CollisionCategory.cameraCategory.rawValue
-        myDroneNode.physicsBody?.contactTestBitMask = CollisionCategory.powerUpsCategory.rawValue
-        myDroneNode.physicsBody?.collisionBitMask = CollisionCategory.powerUpsCategory.rawValue
+        myDroneNode.physicsBody?.contactTestBitMask = CollisionCategory.shootCategory.rawValue
+        myDroneNode.physicsBody?.collisionBitMask = CollisionCategory.shootCategory.rawValue
         sceneView.pointOfView?.addChildNode(myDroneNode)
+        
+        sceneView.scene.physicsWorld.contactDelegate = self
+        
+        self.addAudioNode()
         
         let anchor1 = ARAnchor(name: "myDrone", transform: simd_float4x4(myDroneNode.worldTransform))
         //guard let anchor = sceneView.anchor(for: node) else { fatalError("can't find anchor") }
@@ -300,9 +310,9 @@ class PvPViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate 
         node.physicsBody?.isAffectedByGravity = false
             
         //these bitmasks used to define "collisions" with other objects
-        node.physicsBody?.categoryBitMask = CollisionCategory.missileCategory.rawValue
-        node.physicsBody?.contactTestBitMask = CollisionCategory.targetCategory.rawValue
-        node.physicsBody?.collisionBitMask = CollisionCategory.targetCategory.rawValue
+        node.physicsBody?.categoryBitMask = CollisionCategory.shootCategory.rawValue
+        node.physicsBody?.contactTestBitMask = CollisionCategory.cameraCategory.rawValue
+        node.physicsBody?.collisionBitMask = CollisionCategory.cameraCategory.rawValue
             
         return node
     }
@@ -328,6 +338,115 @@ class PvPViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate 
         let configuration = ARWorldTrackingConfiguration()
         configuration.planeDetection = .horizontal
         sceneView.session.run(configuration, options: [.resetTracking, .removeExistingAnchors])
+    }
+    
+    func physicsWorld(_ world: SCNPhysicsWorld, didBegin contact: SCNPhysicsContact) {
+        
+        var collisionType = 0  // 1 - player shot; 2 - power up; 3 - drones range; 4 - drone shoot;
+        var missle: SCNNode! //missile or camera
+        var object: SCNNode! //drones or power ups
+        
+        if contact.nodeA.physicsBody?.categoryBitMask == CollisionCategory.missileCategory.rawValue &&
+            (contact.nodeB.physicsBody?.categoryBitMask == CollisionCategory.targetCategory.rawValue ||
+             contact.nodeB.physicsBody?.categoryBitMask == CollisionCategory.domoCategory.rawValue) {
+            missle = contact.nodeA //missile
+            object = contact.nodeB //drone or domo
+            collisionType = 1
+        } else if contact.nodeB.physicsBody?.categoryBitMask == CollisionCategory.missileCategory.rawValue  &&
+            (contact.nodeA.physicsBody?.categoryBitMask == CollisionCategory.targetCategory.rawValue ||
+                contact.nodeA.physicsBody?.categoryBitMask == CollisionCategory.domoCategory.rawValue){
+            missle = contact.nodeB //missile
+            object = contact.nodeA //drone or domo
+            collisionType = 1
+        } else if contact.nodeA.physicsBody?.categoryBitMask == CollisionCategory.cameraCategory.rawValue &&
+            contact.nodeB.physicsBody?.categoryBitMask == CollisionCategory.powerUpsCategory.rawValue{
+            missle = contact.nodeA //camera
+            object = contact.nodeB //power ups
+            collisionType = 2
+        } else if contact.nodeB.physicsBody?.categoryBitMask == CollisionCategory.cameraCategory.rawValue  &&
+            contact.nodeA.physicsBody?.categoryBitMask == CollisionCategory.powerUpsCategory.rawValue{
+            missle = contact.nodeB //camera
+            object = contact.nodeA //power ups
+            collisionType = 2
+        }else if contact.nodeA.physicsBody?.categoryBitMask == CollisionCategory.cameraCategory.rawValue &&
+            contact.nodeB.physicsBody?.categoryBitMask ==
+            CollisionCategory.droneRangeCategory.rawValue{
+            missle = contact.nodeA// camera
+            object = contact.nodeB// Drone range
+            collisionType = 3
+        }else if contact.nodeB.physicsBody?.categoryBitMask == CollisionCategory.droneRangeCategory.rawValue &&
+            contact.nodeA.physicsBody?.categoryBitMask == CollisionCategory.cameraCategory.rawValue{
+            missle = contact.nodeB// camera
+            object = contact.nodeA// Drone range
+            collisionType = 3
+            
+        }else if contact.nodeA.physicsBody?.categoryBitMask == CollisionCategory.shootCategory.rawValue &&
+            contact.nodeB.physicsBody?.categoryBitMask == CollisionCategory.cameraCategory.rawValue{
+            missle = contact.nodeA// shoot
+            object = contact.nodeB// camera
+            collisionType = 4
+        }else if contact.nodeB.physicsBody?.categoryBitMask == CollisionCategory.shootCategory.rawValue &&
+            contact.nodeA.physicsBody?.categoryBitMask == CollisionCategory.cameraCategory.rawValue{
+            missle = contact.nodeB// shoot
+            object = contact.nodeA// camera
+            collisionType = 4
+        }else { // useless cases
+            return
+        }
+        
+        if missle.parent == nil{
+            return
+        }
+        
+        switch collisionType{
+        case 2://collision between camera and power up
+            DispatchQueue.main.async {
+                object.removeFromParentNode() //remove power up from view
+                self.ammo += 5
+                Vibration.heavy.vibrate()
+                self.playSound(sound: "powerup", format: "wav")
+            }
+            self.updateAmmo()
+            break
+        case 4: //drone shoot hits the user
+            DispatchQueue.main.async {
+                missle.removeFromParentNode()
+                self.imageHit.isHidden = false
+                self.imageHit.alpha = 1.0
+                UIView.animate(withDuration: 0.2, animations: {
+                    self.imageHit.alpha = 0.0
+                }, completion: { (success) in
+                    UIView.animate(withDuration: 0.2, animations: {
+                        self.imageHit.alpha = 1.0
+                    }, completion: { (success) in
+                        self.imageHit.alpha = 1.0
+                        self.imageHit.isHidden = true
+                    })
+                })
+                self.ammo -= 5
+                self.updateAmmo()
+                Vibration.oldSchool.vibrate()
+            }
+            break
+        default:
+            break
+        }
+    }
+    
+    func updateAmmo(){
+        if ammo <= 0{
+            ammo = 0
+        }
+        DispatchQueue.main.async {
+            if self.ammo <= 5 && self.ammo>0{
+                self.playSound(sound: "warning", format: "wav")
+                Vibration.warning.vibrate()
+//                self.logLabel.isHidden = false  // trocar para animacao
+            } else {
+//                self.logLabel.isHidden = true
+            }
+            self.ammoLabel.text = String(format: "%03d", self.ammo)
+        }
     }
     
     func playSound(sound : String, format: String) {

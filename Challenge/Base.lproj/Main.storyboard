@@ -312,24 +312,56 @@
                                     <constraint firstAttribute="width" constant="819" id="hir-Fx-gXi"/>
                                 </constraints>
                             </imageView>
+                            <imageView hidden="YES" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Hit" translatesAutoresizingMaskIntoConstraints="NO" id="5h2-GV-aRT" userLabel="Image Hit">
+                                <rect key="frame" x="0.0" y="0.0" width="896" height="414"/>
+                            </imageView>
+                            <imageView hidden="YES" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="timer" translatesAutoresizingMaskIntoConstraints="NO" id="vfO-Ah-DGA">
+                                <rect key="frame" x="49" y="257" width="120" height="120"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="120" id="1HP-eQ-hT6"/>
+                                    <constraint firstAttribute="width" constant="120" id="dcx-ud-xHV"/>
+                                </constraints>
+                            </imageView>
+                            <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" usesAttributedText="YES" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="A6A-QS-kNR" userLabel="Ammo Label">
+                                <rect key="frame" x="69" y="289" width="80.5" height="56"/>
+                                <attributedString key="attributedText">
+                                    <fragment content="100">
+                                        <attributes>
+                                            <color key="NSColor" red="0.99215686274509807" green="0.47843137254901957" blue="0.13333333333333333" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                            <font key="NSFont" size="48" name="SevenSegmentRegular"/>
+                                            <paragraphStyle key="NSParagraphStyle" alignment="center" lineBreakMode="wordWrapping" baseWritingDirection="natural" tighteningFactorForTruncation="0.0"/>
+                                        </attributes>
+                                    </fragment>
+                                </attributedString>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                         <constraints>
                             <constraint firstItem="Utd-KG-hfX" firstAttribute="centerY" secondItem="BLU-oV-E5J" secondAttribute="centerY" id="5xf-1z-DiU"/>
                             <constraint firstAttribute="trailing" secondItem="EQs-8R-Qg7" secondAttribute="trailing" constant="38" id="7Uv-UL-hfv"/>
                             <constraint firstItem="0zi-bs-ej7" firstAttribute="trailing" secondItem="C0s-fJ-dAm" secondAttribute="trailing" id="7fd-Mj-kVs"/>
+                            <constraint firstItem="6Op-ph-0nQ" firstAttribute="bottom" secondItem="vfO-Ah-DGA" secondAttribute="bottom" constant="16" id="APK-SP-S8B"/>
                             <constraint firstItem="0zi-bs-ej7" firstAttribute="trailing" secondItem="JZY-HX-VTK" secondAttribute="trailing" id="APt-3x-kzk"/>
+                            <constraint firstItem="vfO-Ah-DGA" firstAttribute="leading" secondItem="6Op-ph-0nQ" secondAttribute="leading" constant="5" id="Bmj-Dq-41d"/>
+                            <constraint firstItem="5h2-GV-aRT" firstAttribute="top" secondItem="BLU-oV-E5J" secondAttribute="top" id="EBW-zk-cC9"/>
+                            <constraint firstItem="5h2-GV-aRT" firstAttribute="bottom" secondItem="BLU-oV-E5J" secondAttribute="bottom" id="Eo2-Fy-0K2"/>
                             <constraint firstItem="6Op-ph-0nQ" firstAttribute="trailing" secondItem="xCl-jx-WjN" secondAttribute="trailing" constant="16" id="GdE-TM-X6A"/>
+                            <constraint firstItem="5h2-GV-aRT" firstAttribute="leading" secondItem="BLU-oV-E5J" secondAttribute="leading" id="J4k-CB-5P5"/>
                             <constraint firstItem="C0s-fJ-dAm" firstAttribute="top" secondItem="JZY-HX-VTK" secondAttribute="bottom" constant="8" id="JZD-lw-ubt"/>
                             <constraint firstItem="csZ-0K-YEr" firstAttribute="top" secondItem="6Op-ph-0nQ" secondAttribute="top" id="KK4-PM-phm"/>
                             <constraint firstItem="6Op-ph-0nQ" firstAttribute="bottom" secondItem="xCl-jx-WjN" secondAttribute="bottom" constant="16" id="N7w-Cz-FIA"/>
+                            <constraint firstItem="6Op-ph-0nQ" firstAttribute="bottom" secondItem="csZ-0K-YEr" secondAttribute="bottom" constant="-21" id="OJQ-jZ-WzK"/>
+                            <constraint firstItem="A6A-QS-kNR" firstAttribute="centerY" secondItem="vfO-Ah-DGA" secondAttribute="centerY" id="VIs-5c-bNr"/>
                             <constraint firstItem="EQs-8R-Qg7" firstAttribute="leading" secondItem="BLU-oV-E5J" secondAttribute="leading" constant="39" id="YLz-ku-7Fq"/>
                             <constraint firstItem="JZY-HX-VTK" firstAttribute="top" secondItem="6Op-ph-0nQ" secondAttribute="top" constant="5" id="YSI-QE-8wJ"/>
                             <constraint firstItem="0zi-bs-ej7" firstAttribute="top" secondItem="6Op-ph-0nQ" secondAttribute="top" constant="24" id="ZFt-lG-V9A"/>
                             <constraint firstItem="JZY-HX-VTK" firstAttribute="centerX" secondItem="Utd-KG-hfX" secondAttribute="centerX" id="eNM-Gu-W9E"/>
                             <constraint firstItem="Utd-KG-hfX" firstAttribute="centerX" secondItem="BLU-oV-E5J" secondAttribute="centerX" id="g8T-hL-2wG"/>
+                            <constraint firstAttribute="trailing" secondItem="5h2-GV-aRT" secondAttribute="trailing" id="jDk-BK-1rl"/>
                             <constraint firstItem="C0s-fJ-dAm" firstAttribute="top" secondItem="0zi-bs-ej7" secondAttribute="bottom" constant="14" id="kKM-Xw-DEx"/>
                             <constraint firstAttribute="bottom" secondItem="csZ-0K-YEr" secondAttribute="bottom" id="m0Y-mh-eCa"/>
+                            <constraint firstItem="A6A-QS-kNR" firstAttribute="centerX" secondItem="vfO-Ah-DGA" secondAttribute="centerX" id="n8B-3z-maZ"/>
                             <constraint firstAttribute="trailing" secondItem="csZ-0K-YEr" secondAttribute="trailing" id="tTa-95-7DW"/>
                             <constraint firstItem="EQs-8R-Qg7" firstAttribute="bottom" secondItem="6Op-ph-0nQ" secondAttribute="bottom" id="ttG-2b-s7J"/>
                             <constraint firstItem="csZ-0K-YEr" firstAttribute="leading" secondItem="BLU-oV-E5J" secondAttribute="leading" id="uEt-U5-zpA"/>
@@ -339,13 +371,16 @@
                     </view>
                     <navigationItem key="navigationItem" id="HAn-dy-Glr"/>
                     <connections>
+                        <outlet property="ammoLabel" destination="A6A-QS-kNR" id="gwx-9s-sGu"/>
                         <outlet property="crosshairImage" destination="Utd-KG-hfX" id="fGs-k7-gVp"/>
                         <outlet property="hudBottomImagem" destination="EQs-8R-Qg7" id="Ig6-9x-cvc"/>
                         <outlet property="hudTopImage" destination="0zi-bs-ej7" id="1vG-hR-LMJ"/>
+                        <outlet property="imageHit" destination="5h2-GV-aRT" id="alB-Km-cWd"/>
                         <outlet property="messageLabel" destination="JZY-HX-VTK" id="8zu-hD-vy5"/>
                         <outlet property="restartButton" destination="C0s-fJ-dAm" id="qZG-fD-Y4c"/>
                         <outlet property="sceneView" destination="csZ-0K-YEr" id="EJb-Wx-V6S"/>
                         <outlet property="shootButton" destination="xCl-jx-WjN" id="nxH-HC-GqF"/>
+                        <outlet property="timer" destination="vfO-Ah-DGA" id="s8d-9m-1cS"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="uhe-YI-d8M" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
