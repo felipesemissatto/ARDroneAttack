@@ -14,9 +14,7 @@ import MultipeerConnectivity
 
 class PvPViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     
-    var shootNode: SCNNode!
-
-    @IBOutlet var sceneView: ARView!
+    @IBOutlet var arView: ARView!
     @IBOutlet weak var restartButton: UIButton!
     @IBOutlet weak var messageLabel: MessageLabel!
     @IBOutlet weak var shootButton: UIButton!
@@ -27,6 +25,8 @@ class PvPViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate 
     var multipeerSession: MultipeerSession?
     
     let coachingOverlay = ARCoachingOverlayView()
+    
+    var aimBox = ModelEntity()
     
     // A dictionary to map MultiPeer IDs to ARSession ID's.
     // This is useful for keeping track of which peer created which ARAnchors.
@@ -40,11 +40,12 @@ class PvPViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate 
         
         super.viewDidAppear(animated)
 
-            sceneView.session.delegate = self
+        
+            arView.session.delegate = self
 
             // Turn off ARView's automatically-configured session
             // to create and set up your own configuration.
-            sceneView.automaticallyConfigureSession = false
+            arView.automaticallyConfigureSession = false
             
             configuration = ARWorldTrackingConfiguration()
 
@@ -55,10 +56,10 @@ class PvPViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate 
             configuration?.environmentTexturing = .automatic
 
             // Begin the session.
-            sceneView.session.run(configuration!)
+            arView.session.run(configuration!)
             
             // Use key-value observation to monitor your ARSession's identifier.
-            sessionIDObservation = observe(\.sceneView.session.identifier, options: [.new]) { object, change in
+            sessionIDObservation = observe(\.arView.session.identifier, options: [.new]) { object, change in
                 print("SessionID changed to: \(change.newValue!)")
                 // Tell all other peers about your ARSession's changed ID, so
                 // that they can keep track of which ARAnchors are yours.
@@ -79,11 +80,23 @@ class PvPViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate 
         }
     
         override func viewDidLoad() {
-        
-        if let shootScene = SCNScene(named: "Assets.scnassets/drone-shoot.dae") {
-            shootNode = shootScene.rootNode.childNode(withName: "Cube_001", recursively: true)!
-            }
-        
+            self.shootButton.isHidden = false
+            self.hudTopImage.isHidden = false
+            self.crosshairImage.isHidden = false
+            self.hudBottomImagem.isHidden = false
+            
+            
+            // Aim Box
+            aimBox = ModelEntity(
+              mesh: MeshResource.generateBox(size: 0.05),
+              materials: [SimpleMaterial(color: .red, isMetallic: true)]
+            )
+            
+            let cameraAnchor = AnchorEntity(.camera)
+            cameraAnchor.addChild(aimBox)
+            arView.scene.addAnchor(cameraAnchor)
+
+            aimBox.transform.translation = [0, -0.07, -4]
         }
     
         override func viewWillAppear(_ animated: Bool) {
@@ -92,7 +105,7 @@ class PvPViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate 
             // Create a session configuration
             let configuration = ARWorldTrackingConfiguration()
             configuration.planeDetection = .horizontal
-            sceneView.session.run(configuration)
+            arView.session.run(configuration)
             
         }
         
@@ -100,7 +113,7 @@ class PvPViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate 
             super.viewWillDisappear(animated)
             
             // Pause the view's session
-            sceneView.session.pause()
+            arView.session.pause()
         }
     
 
@@ -119,9 +132,9 @@ class PvPViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate 
                                                     materials: [SimpleMaterial(color: color, isMetallic: false)])
                     anchorEntity.addChild(coloredSphere)
 
-                    sceneView.scene.addAnchor(anchorEntity)
+                    arView.scene.addAnchor(anchorEntity)
                     
-                    shootButton.isHidden = false
+                    self.shootButton.isHidden = false
                     self.hudTopImage.isHidden = false
                     self.crosshairImage.isHidden = false
                     self.hudBottomImagem.isHidden = false
@@ -139,13 +152,13 @@ class PvPViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate 
                 let dataIsCritical = data.priority == .critical
                 multipeerSession.sendToAllPeers(encodedData, reliably: dataIsCritical)
             } else {
-                print("Deferred sending collaboration to later because there are no peers.")
+//                print("Deferred sending collaboration to later because there are no peers.")
             }
         }
 
         func receivedData(_ data: Data, from peer: MCPeerID) {
             if let collaborationData = try? NSKeyedUnarchiver.unarchivedObject(ofClass: ARSession.CollaborationData.self, from: data) {
-                sceneView.session.update(with: collaborationData)
+                arView.session.update(with: collaborationData)
                 return
             }
             // ...
@@ -220,72 +233,42 @@ class PvPViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate 
         }
         
         @IBAction func resetTracking() {
-            guard let configuration = sceneView.session.configuration else { print("A configuration is required"); return }
-            sceneView.session.run(configuration, options: [.resetTracking, .removeExistingAnchors])
+            guard let configuration = arView.session.configuration else { print("A configuration is required"); return }
+            arView.session.run(configuration, options: [.resetTracking, .removeExistingAnchors])
         }
         
         @IBAction func fireButton(_ sender: Any) {
+//            let location = CGPoint(x: arView.frame.size.width/2, y: arView.frame.size.height/2)
+//
+//            // Attempt to find a 3D location on a horizontal surface underneath the user's touch location.
+//            let results = arView.raycast(from: location, allowing: .estimatedPlane, alignment: .horizontal)
+//            if let firstResult = results.first {
+//                // Add an ARAnchor at the touch location with a special name you check later in `session(_:didAdd:)`.
+//                let anchor = ARAnchor(name: "Anchor for object placement", transform: firstResult.worldTransform)
+//                arView.session.add(anchor: anchor)
+//
+//            } else {
+//                messageLabel.displayMessage("Can't place object - no surface found.\nLook for flat surfaces.", duration: 2.0)
+//                print("Warning: Object placement failed.")
+//            }
             
+//            let url = URL(fileURLWithPath: "Assets.scnassets/drone/drone.scn")
+//            let entity = try? ModelEntity.load(contentsOf: url)
+            
+            // missile Box
+            let missileBox = ModelEntity(
+              mesh: MeshResource.generateBox(size: 0.05),
+              materials: [SimpleMaterial(color: .red, isMetallic: true)]
+            )
+
+            let cameraAnchor = AnchorEntity(.camera)
+            cameraAnchor.addChild(missileBox)
+            arView.scene.addAnchor(cameraAnchor)
+
+            missileBox.transform.translation = [0, 0, -0.2]
+            
+            missileBox.move(to: aimBox.transform, relativeTo: cameraAnchor, duration: 1)
         }
-    
-        func fireMissile(){
-            
-            let anchor = AnchorEntity()
-            
-            var node = SCNNode()
-            //create node
-            node = createMissile()
-            
-            //get the users position and direction
-            let (direction, position) = self.getUserVector()
-            node.position = position
-            var nodeDirection = SCNVector3()
-           
-            nodeDirection  = SCNVector3(direction.x*4,direction.y*4,direction.z*4)
-            node.physicsBody?.applyForce(nodeDirection, at: SCNVector3(0.1,0,0), asImpulse: true)
-            
-            //move node
-            node.physicsBody?.applyForce(nodeDirection , asImpulse: true)
-            
-            //add node to scene
-            sceneView.scene.anchors.append(anchor)
-//            playSound(sound: "laser", format: "wav")
-        }
-    
-        //creates nodes
-        func createMissile()->SCNNode{
-            let node = shootNode.clone()
-            node.scale = SCNVector3(0.01,0.02,0.02)
-            node.name = "tiro"
-            
-            //the physics body governs how the object interacts with other objects and its environment
-            node.physicsBody = SCNPhysicsBody(type: .dynamic, shape: nil)
-            node.physicsBody?.isAffectedByGravity = false
-            
-            //these bitmasks used to define "collisions" with other objects
-            node.physicsBody?.categoryBitMask = CollisionCategory.missileCategory.rawValue
-            node.physicsBody?.contactTestBitMask = CollisionCategory.targetCategory.rawValue
-            node.physicsBody?.collisionBitMask = CollisionCategory.targetCategory.rawValue
-            
-            return node
-        }
-    
-        func getUserVector() -> (SCNVector3, SCNVector3) { // (direction, position)
-               if let frame = self.sceneView.session.currentFrame {
-                   var translation = matrix_identity_float4x4
-                   translation.columns.0.x = cos(.pi)
-                   translation.columns.0.y = -sin(.pi)
-                   translation.columns.1.x = sin(.pi)
-                   translation.columns.1.y = cos(.pi)
-                   
-                   let mat = SCNMatrix4(frame.camera.transform) // 4x4 transform matrix describing camera in world space
-                   let dir = SCNVector3(-1 * mat.m31, -1 * mat.m32, -1 * mat.m33) // orientation of camera in world space
-                   let pos = SCNVector3(mat.m41, mat.m42, mat.m43) // location of camera in world space
-                   
-                   return (dir, pos)
-               }
-               return (SCNVector3(0, 0, -1), SCNVector3(0, 0, -0.2))
-           }
     
         override var prefersStatusBarHidden: Bool {
             // Request that iOS hide the status bar to improve immersiveness of the AR experience.
@@ -298,18 +281,18 @@ class PvPViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate 
         }
         
         private func removeAllAnchorsOriginatingFromARSessionWithID(_ identifier: String) {
-            guard let frame = sceneView.session.currentFrame else { return }
+            guard let frame = arView.session.currentFrame else { return }
             for anchor in frame.anchors {
                 guard let anchorSessionID = anchor.sessionIdentifier else { continue }
                 if anchorSessionID.uuidString == identifier {
-                    sceneView.session.remove(anchor: anchor)
+                    arView.session.remove(anchor: anchor)
                 }
             }
         }
         
         private func sendARSessionIDTo(peers: [MCPeerID]) {
             guard let multipeerSession = multipeerSession else { return }
-            let idString = sceneView.session.identifier.uuidString
+            let idString = arView.session.identifier.uuidString
             let command = "SessionID:" + idString
             if let commandData = command.data(using: .utf8) {
                 multipeerSession.sendToPeers(commandData, reliably: true, peers: peers)

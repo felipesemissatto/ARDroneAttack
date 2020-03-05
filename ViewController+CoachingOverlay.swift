@@ -28,12 +28,12 @@ extension PvPViewController: ARCoachingOverlayViewDelegate {
 
     func setupCoachingOverlay() {
         // Set up coaching view
-        coachingOverlay.session = sceneView.session
+        coachingOverlay.session = arView.session
         coachingOverlay.delegate = self
         coachingOverlay.goal = .tracking
         
         coachingOverlay.translatesAutoresizingMaskIntoConstraints = false
-        sceneView.addSubview(coachingOverlay)
+        arView.addSubview(coachingOverlay)
         
         NSLayoutConstraint.activate([
             coachingOverlay.centerXAnchor.constraint(equalTo: view.centerXAnchor),

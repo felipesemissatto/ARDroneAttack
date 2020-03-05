@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="15702" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="xjM-lm-N3w">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="15705" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="xjM-lm-N3w">
     <device id="retina6_1" orientation="landscape" appearance="light"/>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15704"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15706"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -332,12 +332,12 @@
                     </view>
                     <navigationItem key="navigationItem" id="HAn-dy-Glr"/>
                     <connections>
+                        <outlet property="arView" destination="BLU-oV-E5J" id="byS-dI-QFN"/>
                         <outlet property="crosshairImage" destination="Utd-KG-hfX" id="fGs-k7-gVp"/>
                         <outlet property="hudBottomImagem" destination="EQs-8R-Qg7" id="Ig6-9x-cvc"/>
                         <outlet property="hudTopImage" destination="0zi-bs-ej7" id="1vG-hR-LMJ"/>
                         <outlet property="messageLabel" destination="JZY-HX-VTK" id="8zu-hD-vy5"/>
                         <outlet property="restartButton" destination="C0s-fJ-dAm" id="qZG-fD-Y4c"/>
-                        <outlet property="sceneView" destination="BLU-oV-E5J" id="byS-dI-QFN"/>
                         <outlet property="shootButton" destination="xCl-jx-WjN" id="nxH-HC-GqF"/>
                     </connections>
                 </viewController>
