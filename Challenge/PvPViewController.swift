@@ -138,6 +138,21 @@ class PvPViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate 
                     self.hudTopImage.isHidden = false
                     self.crosshairImage.isHidden = false
                     self.hudBottomImagem.isHidden = false
+                } else if anchor.name == "missile" {
+                    // Create a cube at the location of the anchor.
+                    let boxLength: Float = 0.05
+                    // Color the cube based on the user that placed it.
+                    let color = anchor.sessionIdentifier?.toRandomColor() ?? .white
+                    let coloredCube = ModelEntity(mesh: MeshResource.generateBox(size: boxLength),
+                                                  materials: [SimpleMaterial(color: color, isMetallic: true)])
+                    // Offset the cube by half its length to align its bottom with the real-world surface.
+                    coloredCube.position = [0, boxLength / 2, 0]
+                    
+                    // Attach the cube to the ARAnchor via an AnchorEntity.
+                    //   World origin -> ARAnchor -> AnchorEntity -> ModelEntity
+                    let anchorEntity = AnchorEntity(anchor: anchor)
+                    anchorEntity.addChild(coloredCube)
+                    arView.scene.addAnchor(anchorEntity)
                 }
             }
         }
@@ -262,12 +277,11 @@ class PvPViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate 
             )
 
             let cameraAnchor = AnchorEntity(.camera)
+            cameraAnchor.name = "missile"
             cameraAnchor.addChild(missileBox)
-            arView.scene.addAnchor(cameraAnchor)
-
             missileBox.transform.translation = [0, 0, -0.2]
-            
             missileBox.move(to: aimBox.transform, relativeTo: cameraAnchor, duration: 1)
+            arView.scene.addAnchor(cameraAnchor)
         }
     
         override var prefersStatusBarHidden: Bool {
