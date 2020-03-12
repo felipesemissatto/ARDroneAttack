@@ -7,6 +7,13 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2F6A99E32417BC6500D59DC1 /* DroneEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F6A99E22417BC6500D59DC1 /* DroneEntity.swift */; };
+		2F6A99E52417BE3000D59DC1 /* MissileEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F6A99E42417BE3000D59DC1 /* MissileEntity.swift */; };
+		2F6A99E72417C18100D59DC1 /* GeometryComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F6A99E62417C18100D59DC1 /* GeometryComponent.swift */; };
+		2F6A99E92417CEBC00D59DC1 /* EntityManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F6A99E82417CEBC00D59DC1 /* EntityManager.swift */; };
+		2F6A99EF2417D85A00D59DC1 /* LoadUSDComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F6A99EE2417D85A00D59DC1 /* LoadUSDComponent.swift */; };
+		2F6A99F12417E04A00D59DC1 /* DroneMovementComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F6A99F02417E04A00D59DC1 /* DroneMovementComponent.swift */; };
+		2F6A99F72419269900D59DC1 /* LifeComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F6A99F62419269900D59DC1 /* LifeComponent.swift */; };
 		2FBC0D0922D8EF78007B1E96 /* missionCompleted.wav in Resources */ = {isa = PBXBuildFile; fileRef = 2FBC0D0822D8EF78007B1E96 /* missionCompleted.wav */; };
 		2FEB118D22D7A85300875F30 /* Vibration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FEB118C22D7A85300875F30 /* Vibration.swift */; };
 		3A697D2822D75E40008CA9BB /* Seven Segment.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 3A697D2722D75E40008CA9BB /* Seven Segment.ttf */; };
@@ -39,6 +46,13 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		2F6A99E22417BC6500D59DC1 /* DroneEntity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DroneEntity.swift; sourceTree = "<group>"; };
+		2F6A99E42417BE3000D59DC1 /* MissileEntity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MissileEntity.swift; sourceTree = "<group>"; };
+		2F6A99E62417C18100D59DC1 /* GeometryComponent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeometryComponent.swift; sourceTree = "<group>"; };
+		2F6A99E82417CEBC00D59DC1 /* EntityManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EntityManager.swift; sourceTree = "<group>"; };
+		2F6A99EE2417D85A00D59DC1 /* LoadUSDComponent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadUSDComponent.swift; sourceTree = "<group>"; };
+		2F6A99F02417E04A00D59DC1 /* DroneMovementComponent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DroneMovementComponent.swift; sourceTree = "<group>"; };
+		2F6A99F62419269900D59DC1 /* LifeComponent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LifeComponent.swift; sourceTree = "<group>"; };
 		2FBC0D0822D8EF78007B1E96 /* missionCompleted.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = missionCompleted.wav; sourceTree = "<group>"; };
 		2FEB118C22D7A85300875F30 /* Vibration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Vibration.swift; sourceTree = "<group>"; };
 		3A697D2722D75E40008CA9BB /* Seven Segment.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Seven Segment.ttf"; sourceTree = "<group>"; };
@@ -83,6 +97,27 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		2F6A99E02417B79000D59DC1 /* Component */ = {
+			isa = PBXGroup;
+			children = (
+				2F6A99E62417C18100D59DC1 /* GeometryComponent.swift */,
+				2F6A99EE2417D85A00D59DC1 /* LoadUSDComponent.swift */,
+				2F6A99F02417E04A00D59DC1 /* DroneMovementComponent.swift */,
+				2F6A99F62419269900D59DC1 /* LifeComponent.swift */,
+			);
+			path = Component;
+			sourceTree = "<group>";
+		};
+		2F6A99E12417B7D500D59DC1 /* Entity */ = {
+			isa = PBXGroup;
+			children = (
+				2F6A99E82417CEBC00D59DC1 /* EntityManager.swift */,
+				2F6A99E22417BC6500D59DC1 /* DroneEntity.swift */,
+				2F6A99E42417BE3000D59DC1 /* MissileEntity.swift */,
+			);
+			path = Entity;
+			sourceTree = "<group>";
+		};
 		3A697D2922D75E48008CA9BB /* Fonts */ = {
 			isa = PBXGroup;
 			children = (
@@ -118,20 +153,22 @@
 		3A9D5E1922CBD95F00C18637 /* Challenge */ = {
 			isa = PBXGroup;
 			children = (
-				5643CB6822CFBA3300E1BFDC /* Sounds */,
+				2F6A99E12417B7D500D59DC1 /* Entity */,
+				2F6A99E02417B79000D59DC1 /* Component */,
+				3ACD244023FC345C006C6001 /* PvPViewController.swift */,
 				3A9D5E1A22CBD95F00C18637 /* AppDelegate.swift */,
 				3A9D5E1E22CBD95F00C18637 /* ViewController.swift */,
-				3ACD244023FC345C006C6001 /* PvPViewController.swift */,
 				3A90C25923FD632B009960C7 /* Utilities.swift */,
 				3A9D5E2022CBD95F00C18637 /* Main.storyboard */,
 				3A90C25523FD6029009960C7 /* MessageLabel.swift */,
 				3A90C25723FD6263009960C7 /* MultipeerSession.swift */,
-				3A9D5E2E22CBDA2700C18637 /* Assets.scnassets */,
-				3A9D5E2322CBD96000C18637 /* Assets.xcassets */,
 				3A9D5E2522CBD96000C18637 /* LaunchScreen.storyboard */,
 				3A9D5E2822CBD96000C18637 /* Info.plist */,
 				56D6123E22D6135E00B9BE82 /* drone.swift */,
 				2FEB118C22D7A85300875F30 /* Vibration.swift */,
+				3A9D5E2E22CBDA2700C18637 /* Assets.scnassets */,
+				3A9D5E2322CBD96000C18637 /* Assets.xcassets */,
+				5643CB6822CFBA3300E1BFDC /* Sounds */,
 			);
 			path = Challenge;
 			sourceTree = "<group>";
@@ -241,14 +278,21 @@
 			buildActionMask = 2147483647;
 			files = (
 				2FEB118D22D7A85300875F30 /* Vibration.swift in Sources */,
+				2F6A99F72419269900D59DC1 /* LifeComponent.swift in Sources */,
+				2F6A99E32417BC6500D59DC1 /* DroneEntity.swift in Sources */,
 				56D6123F22D6135E00B9BE82 /* drone.swift in Sources */,
 				3A9D5E1F22CBD95F00C18637 /* ViewController.swift in Sources */,
 				3A9D5E1B22CBD95F00C18637 /* AppDelegate.swift in Sources */,
 				3A90C25623FD6029009960C7 /* MessageLabel.swift in Sources */,
+				2F6A99E52417BE3000D59DC1 /* MissileEntity.swift in Sources */,
+				2F6A99E92417CEBC00D59DC1 /* EntityManager.swift in Sources */,
 				3ACD244123FC345C006C6001 /* PvPViewController.swift in Sources */,
 				3A90C25E23FD63A4009960C7 /* ViewController+CoachingOverlay.swift in Sources */,
+				2F6A99E72417C18100D59DC1 /* GeometryComponent.swift in Sources */,
+				2F6A99F12417E04A00D59DC1 /* DroneMovementComponent.swift in Sources */,
 				3A90C25A23FD632B009960C7 /* Utilities.swift in Sources */,
 				3A90C25823FD6263009960C7 /* MultipeerSession.swift in Sources */,
+				2F6A99EF2417D85A00D59DC1 /* LoadUSDComponent.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

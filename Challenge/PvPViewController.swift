@@ -26,8 +26,6 @@ class PvPViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate 
     
     let coachingOverlay = ARCoachingOverlayView()
     
-    var aimBox = ModelEntity()
-    
     // A dictionary to map MultiPeer IDs to ARSession ID's.
     // This is useful for keeping track of which peer created which ARAnchors.
     var peerSessionIDs = [MCPeerID: String]()
@@ -35,6 +33,9 @@ class PvPViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate 
     var sessionIDObservation: NSKeyValueObservation?
     
     var configuration: ARWorldTrackingConfiguration?
+    
+    var aimBox = ModelEntity()
+    var entityManager: EntityManager!
     
     override func viewDidAppear(_ animated: Bool) {
         
@@ -58,6 +59,9 @@ class PvPViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate 
             // Begin the session.
             arView.session.run(configuration!)
             
+            entityManager = EntityManager(arView: self.arView)
+            entityManager.add(aimBox)
+        
             // Use key-value observation to monitor your ARSession's identifier.
             sessionIDObservation = observe(\.arView.session.identifier, options: [.new]) { object, change in
                 print("SessionID changed to: \(change.newValue!)")
@@ -124,35 +128,31 @@ class PvPViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate 
                     // ...
                     let anchorEntity = AnchorEntity(anchor: participantAnchor)
 
-                    let coordinateSystem = MeshResource.generateCoordinateSystemAxes()
-                    anchorEntity.addChild(coordinateSystem)
+//                    let coordinateSystem = MeshResource.generateCoordinateSystemAxes()
+//                    anchorEntity.addChild(coordinateSystem)
+//
+//                    let color = participantAnchor.sessionIdentifier?.toRandomColor() ?? .white
+//                    let coloredSphere = ModelEntity(mesh: MeshResource.generateSphere(radius: 0.03),
+//                                                    materials: [SimpleMaterial(color: color, isMetallic: false)])
+//                    anchorEntity.addChild(coloredSphere)
 
-                    let color = participantAnchor.sessionIdentifier?.toRandomColor() ?? .white
-                    let coloredSphere = ModelEntity(mesh: MeshResource.generateSphere(radius: 0.03),
-                                                    materials: [SimpleMaterial(color: color, isMetallic: false)])
-                    anchorEntity.addChild(coloredSphere)
-
-                    arView.scene.addAnchor(anchorEntity)
+                    let droneEntity = DroneEntity()
+                    anchorEntity.addChild(droneEntity)
+                    entityManager.add(anchorEntity)
                     
                     self.shootButton.isHidden = false
                     self.hudTopImage.isHidden = false
                     self.crosshairImage.isHidden = false
                     self.hudBottomImagem.isHidden = false
-                } else if anchor.name == "missile" {
-                    // Create a cube at the location of the anchor.
-                    let boxLength: Float = 0.05
-                    // Color the cube based on the user that placed it.
-                    let color = anchor.sessionIdentifier?.toRandomColor() ?? .white
-                    let coloredCube = ModelEntity(mesh: MeshResource.generateBox(size: boxLength),
-                                                  materials: [SimpleMaterial(color: color, isMetallic: true)])
-                    // Offset the cube by half its length to align its bottom with the real-world surface.
-                    coloredCube.position = [0, boxLength / 2, 0]
+                } else if anchor.name == "Anchor for missile" {
+                    let missileEntity = MissileEntity()
                     
                     // Attach the cube to the ARAnchor via an AnchorEntity.
                     //   World origin -> ARAnchor -> AnchorEntity -> ModelEntity
                     let anchorEntity = AnchorEntity(anchor: anchor)
-                    anchorEntity.addChild(coloredCube)
-                    arView.scene.addAnchor(anchorEntity)
+                    anchorEntity.addChild(missileEntity)
+                    entityManager.add(anchorEntity)
+                    entityManager.shootMissile(missileEntity: anchorEntity, aimEntity: aimBox)
                 }
             }
         }
@@ -271,17 +271,25 @@ class PvPViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate 
 //            let entity = try? ModelEntity.load(contentsOf: url)
             
             // missile Box
-            let missileBox = ModelEntity(
-              mesh: MeshResource.generateBox(size: 0.05),
-              materials: [SimpleMaterial(color: .red, isMetallic: true)]
-            )
-
+//            let missileBox = ModelEntity(
+//              mesh: MeshResource.generateBox(size: 0.05),
+//              materials: [SimpleMaterial(color: .red, isMetallic: true)]
+//            )
+//
+//            let cameraAnchor = AnchorEntity(.camera)
+//            cameraAnchor.addChild(missileBox)
+//            arView.scene.addAnchor(cameraAnchor)
+//
+//            missileBox.transform.translation = [0, 0, -0.2]
+//
+//            missileBox.move(to: aimBox.transform, relativeTo: cameraAnchor, duration: 1)
+            
             let cameraAnchor = AnchorEntity(.camera)
-            cameraAnchor.name = "missile"
-            cameraAnchor.addChild(missileBox)
-            missileBox.transform.translation = [0, 0, -0.2]
-            missileBox.move(to: aimBox.transform, relativeTo: cameraAnchor, duration: 1)
-            arView.scene.addAnchor(cameraAnchor)
+            let transform = cameraAnchor.transform
+            
+            // Add an ARAnchor at the touch location with a special name you check later in `session(_:didAdd:)`.
+            let anchor = ARAnchor(name: "Anchor for missile", transform: simd_float4x4(transform.matrix))
+            arView.session.add(anchor: anchor)
         }
     
         override var prefersStatusBarHidden: Bool {
