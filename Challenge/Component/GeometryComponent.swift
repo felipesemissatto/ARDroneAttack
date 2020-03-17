@@ -10,7 +10,7 @@ import Foundation
 import RealityKit
 import UIKit
 
-class GeometryComponent: Component {
+class GeometryComponent: Component{
     
     // property to hold the geometry on this component
     var geometry = ModelEntity()

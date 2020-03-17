@@ -32,20 +32,20 @@ class DroneEntity: Entity, HasModel, HasAnchoring, HasCollision {
 //        let usdComponent = LoadUSDComponent(named: "drone")
 //        self.components[LoadUSDComponent.self] = usdComponent
         
-        // add movement component to the drone entity
-        let movementComponent = DroneMovementComponent()
-        self.components[DroneMovementComponent.self] = movementComponent
-        
-        // add collision component to the drone entity
-        self.components[CollisionComponent] = CollisionComponent(
-                   shapes: [.generateBox(size: [0.05,0.05,0.05])],
-                   mode: .trigger,
-                 filter: CollisionFilter(group: CollisionGroup(rawValue: 1), mask: CollisionGroup(rawValue: 2)) //drone can only collide with missile
-        )
-        
-        // add life component to the drone entity
-        let lifeComponent = LifeComponent()
-        self.components[LifeComponent.self] = lifeComponent
+//        // add movement component to the drone entity
+//        let movementComponent = DroneMovementComponent()
+//        self.components[DroneMovementComponent.self] = movementComponent
+//        
+//        // add collision component to the drone entity
+//        self.components[CollisionComponent] = CollisionComponent(
+//                   shapes: [.generateBox(size: [0.05,0.05,0.05])],
+//                   mode: .trigger,
+//                 filter: CollisionFilter(group: CollisionGroup(rawValue: 1), mask: CollisionGroup(rawValue: 2)) //drone can only collide with missile
+//        )
+//        
+//        // add life component to the drone entity
+//        let lifeComponent = LifeComponent()
+//        self.components[LifeComponent.self] = lifeComponent
     }
     
 //    convenience init(color: UIColor, position: SIMD3<Float>) {

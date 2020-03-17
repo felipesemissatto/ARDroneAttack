@@ -136,7 +136,8 @@ class PvPViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate 
 //                                                    materials: [SimpleMaterial(color: color, isMetallic: false)])
 //                    anchorEntity.addChild(coloredSphere)
 
-                    let droneEntity = DroneEntity()
+                    let droneEntity = ModelEntity(mesh: MeshResource.generateSphere(radius: 0.03),
+                                                  materials: [SimpleMaterial(color: .red, isMetallic: false)])
                     anchorEntity.addChild(droneEntity)
                     entityManager.add(anchorEntity)
                     
@@ -145,7 +146,12 @@ class PvPViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate 
                     self.crosshairImage.isHidden = false
                     self.hudBottomImagem.isHidden = false
                 } else if anchor.name == "Anchor for missile" {
-                    let missileEntity = MissileEntity()
+                    // minh entidade nao funciona por nao ser extendidade de codable
+                    // o tiro tá saindo num lugar fixo e indo para um lugar fixo
+                    
+                    print("ancora criada")
+                    let missileEntity = ModelEntity(mesh: MeshResource.generateBox(size: 0.05),
+                                                    materials: [SimpleMaterial(color: .yellow, isMetallic: true)])
                     
                     // Attach the cube to the ARAnchor via an AnchorEntity.
                     //   World origin -> ARAnchor -> AnchorEntity -> ModelEntity
@@ -277,16 +283,21 @@ class PvPViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate 
 //            )
 //
 //            let cameraAnchor = AnchorEntity(.camera)
+//
 //            cameraAnchor.addChild(missileBox)
 //            arView.scene.addAnchor(cameraAnchor)
+//
 //
 //            missileBox.transform.translation = [0, 0, -0.2]
 //
 //            missileBox.move(to: aimBox.transform, relativeTo: cameraAnchor, duration: 1)
             
-            let cameraAnchor = AnchorEntity(.camera)
-            let transform = cameraAnchor.transform
             
+            let frame = self.arView.session.currentFrame
+            let cameraAnchor = AnchorEntity(world: (frame?.camera.transform)!)
+//            let cameraAnchor = AnchorEntity(.camera)
+            let transform = cameraAnchor.transform
+
             // Add an ARAnchor at the touch location with a special name you check later in `session(_:didAdd:)`.
             let anchor = ARAnchor(name: "Anchor for missile", transform: simd_float4x4(transform.matrix))
             arView.session.add(anchor: anchor)

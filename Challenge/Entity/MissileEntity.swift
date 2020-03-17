@@ -36,11 +36,11 @@ class MissileEntity: Entity, HasModel, HasAnchoring, HasCollision {
 //        self.components[LoadUSDComponent.self] = usdComponent
         
         // add collision component to the missile entity
-        self.components[CollisionComponent] = CollisionComponent(
-                shapes: [.generateSphere(radius: 0.03)],
-                   mode: .trigger,
-                 filter: CollisionFilter(group: CollisionGroup(rawValue: 2), mask: CollisionGroup(rawValue: 1)) //missile can collide with drones, barriers and aim
-        )
+//        self.components[CollisionComponent] = CollisionComponent(
+//                shapes: [.generateSphere(radius: 0.03)],
+//                   mode: .trigger,
+//                 filter: CollisionFilter(group: CollisionGroup(rawValue: 2), mask: CollisionGroup(rawValue: 1)) //missile can collide with drones, barriers and aim
+//        )
     }
     
 //    convenience init(color: UIColor, position: SIMD3<Float>) {

@@ -43,7 +43,9 @@ class EntityManager {
     
     // missile movement (initial position to aim)
     func shootMissile(missileEntity: AnchorEntity, aimEntity: ModelEntity){
-        let cameraAnchor = AnchorEntity(.camera)
+        let frame = self.arView.session.currentFrame
+        let cameraAnchor = AnchorEntity(world: (frame?.camera.transform)!)
+//        let cameraAnchor = AnchorEntity(.camera)
         cameraAnchor.addChild(missileEntity)
         arView.scene.addAnchor(cameraAnchor)
         
